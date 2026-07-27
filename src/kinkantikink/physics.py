@@ -12,5 +12,5 @@ class Field:
         if sign==-1:
             return p.v*np.tanh((p.lam/2)**(1/2)*p.v*(x-x_0))*(-1)
         else:
-            p.v*np.tanh((p.lam/2)**(1/2)*p.v*(x-x_0))
+            return p.v*np.tanh((p.lam/2)**(1/2)*p.v*(x-x_0))
 
