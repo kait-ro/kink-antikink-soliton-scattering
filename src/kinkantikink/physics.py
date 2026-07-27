@@ -1,5 +1,6 @@
 import numpy as np
-from parameters import Params
+
+from .parameters import Params
 
 
 def V(phi, p: Params):
