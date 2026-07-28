@@ -1,22 +1,14 @@
 import numpy as np
 
 from .boundary import sponge_damping_coefficient
+from .discretize import laplacian
 from .parameters import Params
 from .physics import Vprime
 
 
 def compute_acceleration(field_values, field_velocity, x, p: Params):
     # field_acceleration = field_xx - V'(field) - damping_coefficient * field_velocity
-    second_spatial_derivative = np.zeros(field_values.shape)
-    second_spatial_derivative[1:-1] = (
-        field_values[2:] - 2 * field_values[1:-1] + field_values[:-2]
-    ) / p.dx**2
-    second_spatial_derivative[0] = (
-        field_values[2] - 2 * field_values[1] + field_values[0]
-    ) / p.dx**2
-    second_spatial_derivative[-1] = (
-        field_values[-1] - 2 * field_values[-2] + field_values[-3]
-    ) / p.dx**2
+    second_spatial_derivative = laplacian(field_values, p.dx, boundary="shift")
 
     damping_coefficient = sponge_damping_coefficient(x, p)
 
@@ -26,7 +18,6 @@ def compute_acceleration(field_values, field_velocity, x, p: Params):
         - damping_coefficient * field_velocity
     )
     return field_acceleration
-
 
 def advance_one_timestep(field_values, field_velocity, x, p: Params):
     """
