@@ -16,10 +16,10 @@ def movingKinkInitial(x, x0, v_in, p: Params, sign):
 # Centered at 0, d0 apart
 def TwoSolitonIC(x, d0, v_in, p):
     kink_part = positionKinkBoostInitial(x, -d0, v_in, p, sign=1)
-    antikink_part = positionKinkBoostInitial(x, d0, v_in, p, sign=1)
-    phi0 = kink_part - antikink_part - p.v
+    antikink_part = positionKinkBoostInitial(x, d0, v_in, p, sign=-1)
+    phi0 = kink_part + antikink_part - p.v
 
     kink_vel = movingKinkInitial(x, -d0, v_in, p, sign=1)
-    antikink_vel = movingKinkInitial(x, d0, v_in, p, sign=1)
-    phi_dot0 = kink_vel + antikink_vel
+    antikink_vel = movingKinkInitial(x, d0, v_in, p, sign=-1)
+    phi_dot0 = kink_vel - antikink_vel
     return phi0, phi_dot0
