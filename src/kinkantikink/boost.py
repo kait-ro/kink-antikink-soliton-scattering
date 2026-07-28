@@ -1,15 +1,15 @@
 from .parameters import Params
-from .physics import phiPrime, staticKink
+from .physics import phi_kink, phi_x
 
 
 def positionKinkBoostInitial(x, x0, v_in, p: Params, sign):
     gamma = 1 / (1 - v_in**2) ** 0.5
-    return staticKink(gamma * x, gamma * x0, p, sign)
+    return phi_kink(gamma * x, gamma * x0, p, sign)
 
 
 def movingKinkInitial(x, x0, v_in, p: Params, sign):
     gamma = 1 / (1 - v_in**2) ** 0.5
-    return -v_in * gamma * phiPrime(gamma * x, gamma * x0, p, sign)
+    return -v_in * gamma * phi_x(gamma * x, gamma * x0, p, sign)
 
 
 # Two soliton initial condition
