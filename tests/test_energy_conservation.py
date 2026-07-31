@@ -5,11 +5,12 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
+from scipy.integrate import trapezoid
+
 from kinkantikink.boost import TwoSolitonIC
 from kinkantikink.energy import energy_density
 from kinkantikink.parameters import Params
 from kinkantikink.solver import run_simulation
-from scipy.integrate import trapezoid
 
 p = Params()
 d0 = 20.0
@@ -37,7 +38,7 @@ def test_interior_energy_roughly_conserved():
             dt_between_snapshots = t[i] - t[i - 1]
             phi_dot_snapshot = (current_phi - phi_history[i - 1]) / dt_between_snapshots
 
-        epsilon = energy_density(current_phi, phi_dot_snapshot, x, p)
+        epsilon = energy_density(current_phi, phi_dot_snapshot, p)
         interior_energy = trapezoid(epsilon[interior_mask], x_interior)
         interior_energy_over_time.append(interior_energy)
 
