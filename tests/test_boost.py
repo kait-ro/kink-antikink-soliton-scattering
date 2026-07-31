@@ -76,5 +76,29 @@ def test_kink_moves_at_v_in():
     measured_speed = (crossing_after - crossing_before) / dt
     assert measured_speed == pytest.approx(v_in, rel=0.15)
 
+# 5. Propagation check, if boosted antikink is moving at v_in or not
+def test_antikink_moves_at_v_in():
+    v_in = 0.25
+    phi0, phi_dot0 = TwoSolitonIC(x, d0, v_in, p)
+
+    def find_right_antikink_zero_crossing(phi):
+        window = (x > d0 - 10) & (x < d0 + 10)
+        xi = x[window]
+        phii = phi[window]
+        sign_changes = np.where(np.diff(np.sign(phii)))[0]
+        idx = sign_changes[0]
+        x0_, x1_ = xi[idx], xi[idx + 1]
+        y0_, y1_ = phii[idx], phii[idx + 1]
+        return x0_ - y0_ * (x1_ - x0_) / (y1_ - y0_)
+
+    dt = 0.01
+    crossing_before = find_right_antikink_zero_crossing(phi0)
+    phi_after = phi0 + dt * phi_dot0
+    crossing_after = find_right_antikink_zero_crossing(phi_after)
+
+    measured_speed = (crossing_after - crossing_before) / dt
+    # antikink at +d0 should move toward the kink, i.e. leftward: speed ~ -v_in
+    assert measured_speed == pytest.approx(-v_in, rel=0.15)
+
 
 # python -m pytest -v
